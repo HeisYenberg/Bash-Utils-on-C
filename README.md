@@ -8,7 +8,7 @@ Bash text utilities: cat, grep.
 
 - Run `make s21_cat_mac` to build Mac version of the programm
 
-`cat [OPTION] [FILE]...`
+`./s21_cat [OPTION] [FILE]...`
 
 ### cat Options
 
@@ -26,7 +26,7 @@ Bash text utilities: cat, grep.
 
 - Run `make s21_grep_mac` to build Mac version of the programm
 
-`grep [options] template [file_name]`
+`./s21_grep [options] template [file_name]`
 
 ### grep Options
 
