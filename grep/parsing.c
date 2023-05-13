@@ -6,13 +6,13 @@ regex_t read_argv(int argc, char **argv, Flag *flags, Patterns *patterns) {
   char *mult_patterns = calloc(100, sizeof(char));
   for (int i = 1; i < argc; i++) {
     if (flags->e) {
-      if (flags->e < 256)
+      if (flags->read_pattern_e < 256)
         patterns[flags->read_pattern_e].place = i;
       else
         flags->error = 1;
       grep_flag_e(regex, flags, argv[i], &mult_patterns);
     } else if (flags->f) {
-      if (flags->e < 256)
+      if (flags->read_pattern_e < 256)
         patterns[flags->read_pattern_e].place = i;
       else
         flags->error = 1;
