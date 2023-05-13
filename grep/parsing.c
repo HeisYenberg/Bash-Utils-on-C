@@ -76,14 +76,14 @@ int get_flags(char *argv, Flag *flags, char **mult_patterns, regex_t regex,
             argv[i]);
   }
   if (flags->e && i != (end_of_arg - 1)) {
-    if (flags->e < 256)
+    if (flags->read_pattern_e < 256)
       patterns[flags->read_pattern_e].place = position;
     else
       flags->error = 1;
     grep_flag_e(regex, flags, argv + (i + 1), mult_patterns);
   }
   if (flags->f && i != (end_of_arg - 1) && !flags->s && !flags->error) {
-    if (flags->e < 256)
+    if (flags->read_pattern_e < 256)
       patterns[flags->read_pattern_e].place = position;
     else
       flags->error = 1;
