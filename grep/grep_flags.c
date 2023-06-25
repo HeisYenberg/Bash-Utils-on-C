@@ -1,10 +1,9 @@
 #include "s21_grep.h"
 
-void grep_flag_f(regex_t regex, Flag *flags, char *argv, char **mult_patterns) {
+void grep_flag_f(Flag *flags, char *argv, char **mult_patterns) {
   if (flags->read_pattern) {
     flags->read_pattern = 0;
     flags->files++;
-    regfree(&regex);
   }
   FILE *file = fopen(argv, "r");
   if (file) {
@@ -14,21 +13,15 @@ void grep_flag_f(regex_t regex, Flag *flags, char *argv, char **mult_patterns) {
     while (fgets(file_string, 4096, file) && !flags->error) {
       *mult_patterns = realloc(
           *mult_patterns, (strlen(*mult_patterns) + 2 + strlen(file_string)));
-      if (!*mult_patterns) {
-        flags->error = 1;
-        break;
-      }
+      if (!*mult_patterns) flags->error = 1;
+      if (file_string[strlen(file_string) - 1] == '\n' &&
+          file_string[0] != '\n')
+        file_string[strlen(file_string) - 1] = '\0';
       if (read) {
         strcat(*mult_patterns, "|");
-        if (file_string[strlen(file_string) - 1] == '\n' &&
-            file_string[0] != '\n')
-          file_string[strlen(file_string) - 1] = '\0';
         strcat(*mult_patterns, file_string);
       } else {
         read = 1;
-        if (file_string[strlen(file_string) - 1] == '\n' &&
-            file_string[0] != '\n')
-          file_string[strlen(file_string) - 1] = '\0';
         sprintf(*mult_patterns, "%s", file_string);
       }
     }
@@ -41,11 +34,10 @@ void grep_flag_f(regex_t regex, Flag *flags, char *argv, char **mult_patterns) {
   flags->f = 0;
 }
 
-void grep_flag_e(regex_t regex, Flag *flags, char *argv, char **mult_patterns) {
+void grep_flag_e(Flag *flags, char *argv, char **mult_patterns) {
   if (flags->read_pattern) {
     flags->read_pattern = 0;
     flags->files++;
-    regfree(&regex);
   }
   *mult_patterns =
       realloc(*mult_patterns, (strlen(*mult_patterns) + strlen(argv) + 2));
@@ -88,10 +80,7 @@ int grep_flag_o(regex_t regex, char *search_string, char *argv, Flag *flags) {
           if (flags->files > 1 && !flags->h && !flags->c) printf("%s:", argv);
           if (flags->n) printf("%d:", flags->n);
 #endif
-          for (int i = pm[0].rm_so; i < pm[0].rm_eo; i++) {
-            printf("%c", buffer[i]);
-          }
-          printf("\n");
+          printf("%.*s\n", pm[0].rm_eo - pm[0].rm_so, buffer + pm[0].rm_so);
           no_match = regexec(&regex, buffer += pm[0].rm_eo, 1, pm, REG_NOTEOL);
         }
       }

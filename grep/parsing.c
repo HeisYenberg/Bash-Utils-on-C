@@ -1,45 +1,47 @@
 #include "s21_grep.h"
 
-regex_t read_argv(int argc, char **argv, Flag *flags, Patterns *patterns) {
+regex_t read_argv(int argc, char **argv, Flag *flags, int *patterns) {
   regex_t regex;
-  int reg_flag = 0, error = 0;
+  int reg_flag = 0;
   char *mult_patterns = calloc(100, sizeof(char));
   for (int i = 1; i < argc; i++) {
     if (flags->e) {
-      if (flags->read_pattern_e < 256)
-        patterns[flags->read_pattern_e].place = i;
+      if (flags->e < 256)
+        patterns[flags->read_pattern_e] = i;
       else
         flags->error = 1;
-      grep_flag_e(regex, flags, argv[i], &mult_patterns);
+      grep_flag_e(flags, argv[i], &mult_patterns);
     } else if (flags->f) {
-      if (flags->read_pattern_e < 256)
-        patterns[flags->read_pattern_e].place = i;
+      if (flags->e < 256)
+        patterns[flags->read_pattern_e] = i;
       else
         flags->error = 1;
-      grep_flag_f(regex, flags, argv[i], &mult_patterns);
+      grep_flag_f(flags, argv[i], &mult_patterns);
     } else if (argv[i][0] == '-') {
-      if (!get_flags(argv[i], flags, &mult_patterns, regex, patterns, i)) {
+      if (!get_flags(argv[i], flags, &mult_patterns, patterns, i)) {
         flags->error = 1;
       }
     } else if (!flags->f && !flags->read_pattern && !flags->read_pattern_e) {
-      error = regcomp(&regex, argv[i], reg_flag);
-      flags->read_pattern = i;
+      mult_patterns = realloc(mult_patterns, strlen(argv[i]) + 1);
+      if (mult_patterns) {
+        sprintf(mult_patterns, "%s", argv[i]);
+        flags->read_pattern = i;
+      } else
+        flags->error = 1;
     } else
       flags->files += 1;
   }
-  if (flags->i && !reg_flag) reg_flag |= REG_ICASE;
+  if (flags->i) reg_flag |= REG_ICASE;
   if (flags->read_pattern_e) reg_flag |= REG_EXTENDED;
   reg_flag |= REG_NEWLINE;
-  if (flags->read_pattern_e) {
-    error = regcomp(&regex, mult_patterns, reg_flag);
-  }
+  int error = regcomp(&regex, mult_patterns, reg_flag);
   if (error) flags->error = 1;
   if (mult_patterns) free(mult_patterns);
   return regex;
 }
 
-int get_flags(char *argv, Flag *flags, char **mult_patterns, regex_t regex,
-              Patterns *patterns, int position) {
+int get_flags(char *argv, Flag *flags, char **mult_patterns, int *patterns,
+              int position) {
   int status = 1, i = 1, end_of_arg = strlen(argv);
   for (; i < end_of_arg; i++) {
     if (argv[i] == 'e') {
@@ -65,29 +67,34 @@ int get_flags(char *argv, Flag *flags, char **mult_patterns, regex_t regex,
     } else if (argv[i] == 'o')
       flags->o = 1;
     else {
+      print_error(argv[i]);
       status = 0;
       break;
     }
   }
-  if (!status && !flags->error) {
-    fprintf(stderr,
-            "grep: invalid option -- '%c'\nUsage: grep [OPTION]... PATTERNS "
-            "[FILE]...\n",
-            argv[i]);
-  }
   if (flags->e && i != (end_of_arg - 1)) {
-    if (flags->read_pattern_e < 256)
-      patterns[flags->read_pattern_e].place = position;
-    else
+    if (flags->read_pattern_e < 256) {
+      patterns[flags->read_pattern_e] = position;
+      grep_flag_e(flags, argv + (i + 1), mult_patterns);
+    } else
       flags->error = 1;
-    grep_flag_e(regex, flags, argv + (i + 1), mult_patterns);
   }
   if (flags->f && i != (end_of_arg - 1) && !flags->s && !flags->error) {
-    if (flags->read_pattern_e < 256)
-      patterns[flags->read_pattern_e].place = position;
-    else
+    if (flags->read_pattern_e < 256) {
+      patterns[flags->read_pattern_e] = position;
+      grep_flag_f(flags, argv + (i + 1), mult_patterns);
+    } else
       flags->error = 1;
-    grep_flag_f(regex, flags, argv + (i + 1), mult_patterns);
   }
   return status;
+}
+
+void print_error(char incorrect_flag) {
+  fprintf(stderr,
+          "grep: invalid option -- '%c'\nusage: grep "
+          "[-abcDEFGHhIiJLlmnOoqRSsUVvwxZ] [-A num] [-B num] [-C[num]]"
+          "[-e pattern][-f file][--binary - files = value][--color = when]"
+          "[--context[= num]][--directories = action][--label]"
+          "[--line - buffered][--null][pattern][file...]\n ",
+          incorrect_flag);
 }

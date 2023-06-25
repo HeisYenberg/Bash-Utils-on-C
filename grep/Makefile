@@ -18,5 +18,8 @@ run_test_mac : clean s21_grep_mac test run_test
 s21_grep_mac :
 	$(CC) s21_grep.c parsing.c grep_flags.c -D MAC -o s21_grep
 
+clang :
+	clang-format -style=Google -i  *.c *.h
+
 clean :
 	rm -rf s21_grep test

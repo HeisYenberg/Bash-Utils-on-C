@@ -3,11 +3,11 @@
 int main(int argc, char **argv) {
   if (argc > 1) {
     Flag flags = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    Patterns pattern[256];
-    regex_t regex = read_argv(argc, argv, &flags, pattern);
+    int patterns[256];
+    regex_t regex = read_argv(argc, argv, &flags, patterns);
     if (!flags.error) {
       for (int i = 1; i < argc; i++) {
-        if (argv[i][0] == '-' || check_for_pattern(pattern, i, flags) ||
+        if (argv[i][0] == '-' || check_for_pattern(patterns, i, flags) ||
             i == flags.read_pattern)
           continue;
         grep_function(regex, argv[i], &flags);
@@ -15,13 +15,15 @@ int main(int argc, char **argv) {
     }
     if (flags.read_pattern || flags.read_pattern_e) regfree(&regex);
   } else
-    fprintf(stderr, "Usage: grep [OPTION]... PATTERNS [FILE]...\n");
+    fprintf(stderr,
+            "Usage: grep [OPTION]... PATTERNS [FILE]...\nTry 'grep --help' for "
+            "more information.\n");
 }
 
-int check_for_pattern(Patterns *patterns, int position, Flag flags) {
+int check_for_pattern(int *patterns, int position, Flag flags) {
   int status = 0;
   for (int i = 0; i < flags.read_pattern_e; i++) {
-    if (patterns[i].place == position) status = 1;
+    if (patterns[i] == position) status = 1;
   }
   return status;
 }
