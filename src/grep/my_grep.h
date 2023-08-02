@@ -1,5 +1,5 @@
-#ifndef S21_GREP_H
-#define S21_GREP_H
+#ifndef MY_GREP_H
+#define MY_GREP_H
 
 #include <regex.h>
 #include <stdio.h>
@@ -22,4 +22,4 @@ void grep_flag_e(Flag *flags, char *argv, char **mult_patterns);
 int grep_flag_o(regex_t regex, char *search_string, char *argv, Flag *flags);
 void print_error(char incorrect_flag);
 
-#endif
+#endif  // MY_GREP_H

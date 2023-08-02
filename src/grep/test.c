@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 #define TEST 10
 
@@ -17,18 +16,18 @@ int main() {
   test_grep_one_file(flags, patterns, &test);
   test_grep_two_files(flags, patterns, &test);
   test_grep_three_files(flags, patterns, &test);
-  system("rm -rf grep.log s21_grep.log");
+  system("rm -rf grep.log my_grep.log");
 }
 
 void test_grep_one_file(char flags[10][3], char pattern[10][6], int *test) {
-  char s21_grep[200], grep[200];
+  char my_grep[200], grep[200];
   for (int i = 0; i < TEST; i++) {
-    sprintf(s21_grep, "./s21_grep %s %s s21_grep.c > s21_grep.log", flags[i],
+    sprintf(my_grep, "./my_grep %s %s my_grep.c > my_grep.log", flags[i],
             pattern[i]);
-    sprintf(grep, "grep %s %s s21_grep.c > grep.log", flags[i], pattern[i]);
-    system(s21_grep);
+    sprintf(grep, "grep %s %s my_grep.c > grep.log", flags[i], pattern[i]);
+    system(my_grep);
     system(grep);
-    int diff = system("diff -s -q grep.log s21_grep.log | grep identical");
+    int diff = system("diff -s -q grep.log my_grep.log | grep identical");
     if (!diff)
       printf("\033[0;32mTEST NUMBER %d %s %s\nSUCCESS\n", *test, flags[i],
              pattern[i]);
@@ -37,13 +36,13 @@ void test_grep_one_file(char flags[10][3], char pattern[10][6], int *test) {
              pattern[i]);
     (*test)++;
     for (int j = 0; j < TEST; j++) {
-      sprintf(s21_grep, "./s21_grep %s %s %s s21_grep.c > s21_grep.log",
-              flags[i], flags[j], pattern[i]);
-      sprintf(grep, "grep %s %s %s s21_grep.c > grep.log", flags[i], flags[j],
+      sprintf(my_grep, "./my_grep %s %s %s my_grep.c > my_grep.log", flags[i],
+              flags[j], pattern[i]);
+      sprintf(grep, "grep %s %s %s my_grep.c > grep.log", flags[i], flags[j],
               pattern[i]);
-      system(s21_grep);
+      system(my_grep);
       system(grep);
-      diff = system("diff -s -q grep.log s21_grep.log | grep identical");
+      diff = system("diff -s -q grep.log my_grep.log | grep identical");
       if (!diff)
         printf("\033[0;32mTEST NUMBER %d %s %s %s\nSUCCESS\n", *test, flags[i],
                flags[j], pattern[i]);
@@ -56,15 +55,15 @@ void test_grep_one_file(char flags[10][3], char pattern[10][6], int *test) {
 }
 
 void test_grep_two_files(char flags[10][3], char pattern[10][6], int *test) {
-  char s21_grep[200], grep[200];
+  char my_grep[200], grep[200];
   for (int i = 0; i < TEST; i++) {
-    sprintf(s21_grep, "./s21_grep %s %s s21_grep.c s21_grep.h > s21_grep.log",
+    sprintf(my_grep, "./my_grep %s %s my_grep.c my_grep.h > my_grep.log",
             flags[i], pattern[i]);
-    sprintf(grep, "grep %s %s s21_grep.c s21_grep.h > grep.log", flags[i],
+    sprintf(grep, "grep %s %s my_grep.c my_grep.h > grep.log", flags[i],
             pattern[i]);
-    system(s21_grep);
+    system(my_grep);
     system(grep);
-    int diff = system("diff -s -q grep.log s21_grep.log | grep identical");
+    int diff = system("diff -s -q grep.log my_grep.log | grep identical");
     if (!diff)
       printf("\033[0;32mTEST NUMBER %d %s %s\nSUCCESS\n", *test, flags[i],
              pattern[i]);
@@ -73,14 +72,13 @@ void test_grep_two_files(char flags[10][3], char pattern[10][6], int *test) {
              pattern[i]);
     (*test)++;
     for (int j = 0; j < TEST; j++) {
-      sprintf(s21_grep,
-              "./s21_grep %s %s %s s21_grep.c s21_grep.h > s21_grep.log",
+      sprintf(my_grep, "./my_grep %s %s %s my_grep.c my_grep.h > my_grep.log",
               flags[i], flags[j], pattern[i]);
-      sprintf(grep, "grep %s %s %s s21_grep.c s21_grep.h > grep.log", flags[i],
+      sprintf(grep, "grep %s %s %s my_grep.c my_grep.h > grep.log", flags[i],
               flags[j], pattern[i]);
-      system(s21_grep);
+      system(my_grep);
       system(grep);
-      diff = system("diff -s -q grep.log s21_grep.log | grep identical");
+      diff = system("diff -s -q grep.log my_grep.log | grep identical");
       if (!diff)
         printf("\033[0;32mTEST NUMBER %d %s %s %s\nSUCCESS\n", *test, flags[i],
                flags[j], pattern[i]);
@@ -93,16 +91,16 @@ void test_grep_two_files(char flags[10][3], char pattern[10][6], int *test) {
 }
 
 void test_grep_three_files(char flags[10][3], char pattern[10][6], int *test) {
-  char s21_grep[200], grep[200];
+  char my_grep[200], grep[200];
   for (int i = 0; i < TEST; i++) {
-    sprintf(s21_grep,
-            "./s21_grep %s %s s21_grep.c s21_grep.h Makefile > s21_grep.log",
+    sprintf(my_grep,
+            "./my_grep %s %s my_grep.c my_grep.h Makefile > my_grep.log",
             flags[i], pattern[i]);
-    sprintf(grep, "grep %s %s s21_grep.c s21_grep.h Makefile > grep.log",
+    sprintf(grep, "grep %s %s my_grep.c my_grep.h Makefile > grep.log",
             flags[i], pattern[i]);
-    system(s21_grep);
+    system(my_grep);
     system(grep);
-    int diff = system("diff -s -q grep.log s21_grep.log | grep identical");
+    int diff = system("diff -s -q grep.log my_grep.log | grep identical");
     if (!diff)
       printf("\033[0;32mTEST NUMBER %d %s %s\nSUCCESS\n", *test, flags[i],
              pattern[i]);
@@ -111,15 +109,14 @@ void test_grep_three_files(char flags[10][3], char pattern[10][6], int *test) {
              pattern[i]);
     (*test)++;
     for (int j = 0; j < TEST; j++) {
-      sprintf(
-          s21_grep,
-          "./s21_grep %s %s %s s21_grep.c s21_grep.h Makefile > s21_grep.log",
-          flags[i], flags[j], pattern[i]);
-      sprintf(grep, "grep %s %s %s s21_grep.c s21_grep.h Makefile > grep.log",
+      sprintf(my_grep,
+              "./my_grep %s %s %s my_grep.c my_grep.h Makefile > my_grep.log",
               flags[i], flags[j], pattern[i]);
-      system(s21_grep);
+      sprintf(grep, "grep %s %s %s my_grep.c my_grep.h Makefile > grep.log",
+              flags[i], flags[j], pattern[i]);
+      system(my_grep);
       system(grep);
-      diff = system("diff -s -q grep.log s21_grep.log | grep identical");
+      diff = system("diff -s -q grep.log my_grep.log | grep identical");
       if (!diff)
         printf("\033[0;32mTEST NUMBER %d %s %s %s\nSUCCESS\n", *test, flags[i],
                flags[j], pattern[i]);

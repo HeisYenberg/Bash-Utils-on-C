@@ -1,4 +1,4 @@
-#include "s21_grep.h"
+#include "my_grep.h"
 
 regex_t read_argv(int argc, char **argv, Flag *flags, int *patterns) {
   regex_t regex;

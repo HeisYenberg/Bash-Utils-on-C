@@ -1,4 +1,4 @@
-#include "s21_grep.h"
+#include "my_grep.h"
 
 void grep_flag_f(Flag *flags, char *argv, char **mult_patterns) {
   if (flags->read_pattern) {

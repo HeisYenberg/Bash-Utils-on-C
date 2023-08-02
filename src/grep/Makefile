@@ -1,9 +1,9 @@
 CC = gcc -Wall -Werror -Wextra
 
-all : s21_grep test run_test
+all : my_grep test run_test
 
-s21_grep :
-	$(CC) s21_grep.c parsing.c grep_flags.c -o s21_grep
+my_grep :
+	$(CC) my_grep.c parsing.c grep_flags.c -o my_grep
 
 test :
 	$(CC)  test.c -o test
@@ -11,15 +11,15 @@ test :
 run_test :
 	./test
 
-rebuild : clean s21_grep test
+rebuild : clean my_grep test
 
-run_test_mac : clean s21_grep_mac test run_test
+run_test_mac : clean my_grep_mac test run_test
 
 s21_grep_mac :
-	$(CC) s21_grep.c parsing.c grep_flags.c -D MAC -o s21_grep
+	$(CC) my_grep.c parsing.c grep_flags.c -D MAC -o my_grep
 
 clang :
 	clang-format -style=Google -i  *.c *.h
 
 clean :
-	rm -rf s21_grep test
+	rm -rf my_grep test

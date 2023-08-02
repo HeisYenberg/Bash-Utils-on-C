@@ -1,4 +1,4 @@
-#include "s21_cat.h"
+#include "my_cat.h"
 
 int main(int argc, char **argv) {
   if (argc > 1) {

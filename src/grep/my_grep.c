@@ -1,4 +1,4 @@
-#include "s21_grep.h"
+#include "my_grep.h"
 
 int main(int argc, char **argv) {
   if (argc > 1) {
