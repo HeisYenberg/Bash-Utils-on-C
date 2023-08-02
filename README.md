@@ -1,4 +1,4 @@
-# Simple Bash Utils
+# Bash-Utils-on-C
 
 Bash text utilities: cat, grep.
 
