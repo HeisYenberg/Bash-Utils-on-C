@@ -4,11 +4,11 @@ Bash text utilities: cat, grep.
 
 ### cat Usage
 
-- Run `make s21_cat` to build Linux version of the programm
+- Run `make my_cat` to build Linux version of the program
 
-- Run `make s21_cat_mac` to build Mac version of the programm
+- Run `make my_cat_mac` to build Mac version of the program
 
-`./s21_cat [OPTION] [FILE]...`
+`./my_cat [OPTION] [FILE]...`
 
 ### cat Options
 
@@ -22,11 +22,11 @@ Bash text utilities: cat, grep.
 
 ### grep Usage
 
-- Run `make s21_grep` to build Linux version of the programm
+- Run `make my_grep` to build Linux version of the program
 
-- Run `make s21_grep_mac` to build Mac version of the programm
+- Run `make my_grep_mac` to build Mac version of the program
 
-`./s21_grep [options] template [file_name]`
+`./my_grep [options] template [file_name]`
 
 ### grep Options
 
